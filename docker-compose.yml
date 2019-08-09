@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+   frontend-webpage:
+      container_name: php
+      image: jackoshiro/task3_frontend:v2
+      ports:
+         - 80:8080
+      volumes:
+         - /mnt/hgfs/data/AI_Utility_Service/:/var/www/html
+   backend-ai-ml:
+      container_name: ai
+      depends_on:
+         - frontend-webpage
+      image: jackoshiro/task3_backend:v2
+      working_dir: /data
+      environment:
+         - PATH=/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      entrypoint: /opt/conda/bin/python -m http.server --cgi 5000
+      ports:
+         - 5000:5000
+      volumes:
+         - /mnt/hgfs/data/AI_Utility_Service/:/data
